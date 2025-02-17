@@ -1,7 +1,9 @@
 export default function Home() {
   return (
       <main>
-        <h1>welcome</h1>
+        <div>
+          Ylab University
+        </div>
       </main>
   );
 }

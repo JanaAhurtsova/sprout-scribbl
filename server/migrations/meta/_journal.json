@@ -8,6 +8,13 @@
       "when": 1735227088283,
       "tag": "0000_spooky_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1739531702782,
+      "tag": "0001_safe_stark_industries",
+      "breakpoints": true
     }
   ]
 }

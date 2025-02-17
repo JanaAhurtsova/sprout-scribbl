@@ -20,8 +20,8 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: light-dark(0 0% 100%, 222.2 84% 4.9%);
+    --foreground: light-dark(222.2 84% 4.9%, 210 40% 98%);
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
@@ -47,8 +47,6 @@ body {
     --radius: 0.5rem;
   }
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
@@ -81,20 +79,4 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-}
-
-@supports (align-content: center) {
-  .container {
-    align-content: center;
-    width: 100%;
-    height: 100svh;
-  }
-}
-
-/* Для старых браузеров и не поддерживающих свойство */
-.container {
-  display: grid; /*или flex*/
-  align-content: center;
-  width: 100%;
-  height: 100svh;
 }
