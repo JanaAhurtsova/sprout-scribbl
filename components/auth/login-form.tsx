@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -11,6 +12,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { emailSignIn } from "@/server/actions/email-signin"
 import { cn } from "@/lib/utils"
+import { FormSuccess } from "./form-success"
+import { FormError } from "./form-error"
 
 export const LoginForm = () => {
   const form = useForm({ 
@@ -22,7 +25,15 @@ export const LoginForm = () => {
     mode: "onChange",
   });
 
-  const { execute, status } = useStateAction(emailSignIn, {});
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const { execute, status } = useStateAction(emailSignIn, {
+    onSuccess(data) {
+      if (data?.data?.error) setError(data.data.error)
+      if (data?.data?.success) setSuccess(data.data.success)
+    },
+  });
 
   const onSubmit = (data: z.infer<typeof loginSchema>) => {
     execute(data)
@@ -63,6 +74,8 @@ export const LoginForm = () => {
                   </FormItem>
                 )}
               />
+              <FormSuccess message={success} />
+              <FormError message={error} />
               <Button size="sm" variant="link" asChild>
                 <Link href="/auth/reset">
                   Forgot your password
@@ -80,3 +93,4 @@ export const LoginForm = () => {
         </div>
       </AuthCard>
 }
+
