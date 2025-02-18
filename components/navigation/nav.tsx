@@ -4,7 +4,6 @@ import Link from "next/link"
 import Image from 'next/image'
 import { Button } from "../ui/button"
 import { LogIn } from "lucide-react"
-// import CartDrawer from "../cart/cart-drawer"
 
 export default async function Nav() {
   const session = await auth()
@@ -18,12 +17,11 @@ export default async function Nav() {
             </Link>
           </li>
           <li className="relative flex items-center hover:bg-muted">
-            {/* <CartDrawer /> */}
           </li>
           {!session ? (
             <li className="flex items-center justify-center">
               <Button asChild>
-                <Link className="flex gap-2" href="/auth/login">
+                <Link className="flex gap-2" href="/login">
                   <LogIn size={16} />
                   <span>Login</span>
                 </Link>
