@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import { eq } from "drizzle-orm";
 import { users } from "../schema";
 import { db } from "..";
+import { generateEmailVerificationToken } from "./tokens";
 
 const saltRounds = 10;
 
@@ -15,12 +16,23 @@ export const emailRegister = actionClient.schema(registerSchema).stateAction(asy
     })
   if (existingUser) {
     if (!existingUser.emailVerified) {
-
-      return { success: "Email Confirmation resent" }
+      const verificationToken = await generateEmailVerificationToken(email);
+      // await sendVerificationEmail(
+      //     verificationToken[0].email,
+      //     verificationToken[0].token
+      //   );
+      return { success: "Email Confirmation resent" };
     }
 
     return {error: "Email already in use"}
   }
-  
-  return {success: 'yaaayy'}
+  await db.insert(users).values({email, name, password: hashedPassword });
+  const verificationToken = await generateEmailVerificationToken(email);
+
+  // await sendVerificationEmail(
+  //   verificationToken[0].email,
+  //   verificationToken[0].token
+  // );
+
+  return { success: "Confirmation Email Sent!" };
 })
