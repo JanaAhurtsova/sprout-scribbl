@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils"
 import { FormSuccess } from "./form-success"
 import { FormError } from "./form-error"
 import { registerSchema } from "@/types/register-schema"
+import { useStateAction } from "next-safe-action/stateful-hooks"
+import { emailRegister } from "@/server/actions/email-register"
 
 export const RegisterForm = () => {
   const form = useForm({ 
@@ -26,8 +28,15 @@ export const RegisterForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const { execute, status } = useStateAction(emailRegister, {
+    onSuccess(data) {
+      if (data?.data?.error) setError(data.data.error)
+      if (data?.data?.success) setSuccess(data.data.success)
+    },
+  });
+
   const onSubmit = (data: z.infer<typeof registerSchema>) => {
-    // execute(data)
+    execute(data)
  }
   return <AuthCard cardTitle="Create an account!"
       backButtonHref="/login"
