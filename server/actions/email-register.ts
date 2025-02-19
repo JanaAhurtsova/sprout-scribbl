@@ -1,4 +1,4 @@
-'use client'
+'use server'
 import { registerSchema } from "@/types/register-schema";
 import { actionClient } from "./action-client";
 import bcrypt from 'bcryptjs';
