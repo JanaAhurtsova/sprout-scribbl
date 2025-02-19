@@ -4,7 +4,12 @@ import { db } from "@/server"
 import Google from 'next-auth/providers/google'
 import Github from 'next-auth/providers/github'
 import Keycloak from 'next-auth/providers/keycloak';
- 
+import Credentials from 'next-auth/providers/credentials';
+import { loginSchema } from "@/types/login-schema"
+import { eq } from "drizzle-orm"
+import { users } from "./schema"
+import bcrypt from "bcryptjs"
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   secret: process.env.AUTH_SECRET,
@@ -27,6 +32,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.AUTH_KEYCLOAK_SECRET,
       issuer: process.env.AUTH_KEYCLOAK_ISSUER,
       allowDangerousEmailAccountLinking: true
+    }),
+    Credentials({
+      async authorize(credentials) {
+        const validatedFields = loginSchema.safeParse(credentials);
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+          const user = await db.query.users.findFirst({
+            where: eq(users.email, email)
+          })
+
+          if (!user || !user.password) return null;
+          const passwordMatch = await bcrypt.compare(password, user.password);
+          if (passwordMatch) return user
+        }
+        return null;
+      },
     })
   ],
   callbacks: {
