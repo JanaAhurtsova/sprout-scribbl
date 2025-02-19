@@ -1,38 +1,41 @@
 "use client"
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useStateAction } from "next-safe-action/stateful-hooks";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import Link from "next/link";
-import * as z from 'zod'
 
-import { AuthCard } from "./auth-card";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
-import { FormSuccess } from "./form-success";
-import { FormError } from "./form-error";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { newPasswordSchema } from "@/types/new-password-schema";
-import { newPassword } from "@/server/actions/new-password";
+import { useForm } from "react-hook-form"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { AuthCard } from "./auth-card"
+import { useStateAction } from "next-safe-action/stateful-hooks"
+import * as z from "zod"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
+import { useState } from "react"
+import { FormSuccess } from "./form-success"
+import { FormError } from "./form-error"
+import { resetSchema } from "@/types/reset-schema"
+import { resetPassword } from "@/server/actions/reset-password"
 
-export const NewPasswordForm = () => {
-  const form = useForm({
-    resolver: zodResolver(newPasswordSchema),
+export default function ResetForm() {
+  const form = useForm<z.infer<typeof resetSchema>>({
+    resolver: zodResolver(resetSchema),
     defaultValues: {
-      password: "",
+      email: "",
     },
-    mode: "onChange",
   })
-
-  const searchParams = useSearchParams()
-  const token = searchParams.get("token")
 
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
 
-  const { execute, status } = useStateAction(newPassword, {
+  const { execute, status } = useStateAction(resetPassword, {
     onSuccess(data) {
       if (data?.data?.error) setError(data.data.error)
       if (data?.data?.success) {
@@ -41,12 +44,13 @@ export const NewPasswordForm = () => {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof newPasswordSchema>) => {
-    execute({ password: values.password, token })
+  const onSubmit = (values: z.infer<typeof resetSchema>) => {
+    execute(values)
   }
-return (
+
+  return (
     <AuthCard
-      cardTitle="Enter a new password"
+      cardTitle="Forgot your password? "
       backButtonHref="/login"
       backButtonLabel="Back to login"
       showSocials
@@ -57,17 +61,17 @@ return (
             <div>
               <FormField
                 control={form.control}
-                name="password"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="*********"
-                        type="password"
-                        autoComplete="current-password"
+                        placeholder="email@example.com"
+                        type="email"
                         disabled={status === "executing"}
+                        autoComplete="email"
                       />
                     </FormControl>
                     <FormDescription />
