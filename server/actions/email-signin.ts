@@ -6,7 +6,7 @@ import { db } from "..";
 import { users } from "../schema";
 import { generateEmailVerificationToken } from "./tokens";
 import { sendVerificationEmail } from "./email";
-import { signIn } from "next-auth/react";
+import { signIn } from "../auth";
 import { AuthError } from "next-auth";
 
 export const emailSignIn = actionClient.schema(loginSchema).stateAction(async ({ parsedInput: { email, password, code }}) => {

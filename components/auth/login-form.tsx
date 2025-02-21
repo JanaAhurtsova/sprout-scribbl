@@ -76,9 +76,9 @@ export const LoginForm = () => {
               />
               <FormSuccess message={success} />
               <FormError message={error} />
-              <Button size="sm" variant="link" asChild>
+              <Button size="sm" className="my-1 px-0" variant="link" asChild>
                 <Link href="/reset">
-                  Forgot your password
+                  Forgot your password?
                 </Link>
               </Button>
             </div>

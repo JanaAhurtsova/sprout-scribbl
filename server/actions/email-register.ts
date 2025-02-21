@@ -29,7 +29,7 @@ export const emailRegister = actionClient.schema(registerSchema).stateAction(asy
   }
   await db.insert(users).values({email, name, password: hashedPassword });
   const verificationToken = await generateEmailVerificationToken(email);
-
+  console.log(email)
   await sendVerificationEmail(
     verificationToken[0].email,
     verificationToken[0].token
