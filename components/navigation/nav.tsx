@@ -1,9 +1,9 @@
 import { auth } from "@/server/auth"
 import { UserButton } from "./user-button"
 import Link from "next/link"
-import Image from 'next/image'
 import { Button } from "../ui/button"
 import { LogIn } from "lucide-react"
+import Logo from "./logo"
 
 export default async function Nav() {
   const session = await auth()
@@ -13,7 +13,7 @@ export default async function Nav() {
         <ul className="flex justify-between items-center md:gap-8 gap-4">
           <li className="flex flex-1">
             <Link href="/" aria-label="sprout and scribble logo">
-              <Image src="/logo.svg" alt="logo" height={89} width={212} priority />
+              <Logo />
             </Link>
           </li>
           <li className="relative flex items-center hover:bg-muted">
