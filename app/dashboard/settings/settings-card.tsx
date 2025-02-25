@@ -23,6 +23,7 @@ import { Switch } from "@/components/ui/switch";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
 import { useState } from "react";
+import { settings } from "@/server/actions/settings";
 
 export default function SettingsCard({ session }: { session: Session } ) {
   const [error, setError] = useState<string | null>(null);
@@ -36,17 +37,20 @@ export default function SettingsCard({ session }: { session: Session } ) {
       password: undefined,
       newPassword: undefined,
       name: session.user?.name || undefined,
-      // isTwoFactorEnabled: session.user?.isTwoFactorEnabled,
+      isTwoFactorEnabled: session.user?.isTwoFactorEnabled || undefined,
       image: session.user?.image || undefined,
     },
     mode: "onChange",
   })
 
-  const { execute, status } = useStateAction(, {
+  const { execute, status } = useStateAction(settings, {
     onSuccess(data) {
       if (data?.data?.error) setError(data.data.error)
       if (data?.data?.success) setSuccess(data.data.success)
     },
+    onError() {
+      setError('Something went wrong');
+    }
   })
   const image = form.watch('image');
   const onSubmit = (data: z.infer<typeof settingsSchema>) => {
@@ -61,7 +65,7 @@ export default function SettingsCard({ session }: { session: Session } ) {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="name"
@@ -105,7 +109,7 @@ export default function SettingsCard({ session }: { session: Session } ) {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="********" {...field} type="password" disabled={ status === 'executing'}  />
+                <Input placeholder="********" {...field} type="password" disabled={ status === 'executing' || session.user.isOAuth} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -118,7 +122,7 @@ export default function SettingsCard({ session }: { session: Session } ) {
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <Input placeholder="********" {...field} type="password" disabled={ status === 'executing'}  />
+                <Input placeholder="********" {...field} type="password" disabled={ status === 'executing' || session.user.isOAuth} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -127,12 +131,12 @@ export default function SettingsCard({ session }: { session: Session } ) {
         <FormField
           control={form.control}
           name="isTwoFactorEnabled"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Two Factor Authentication</FormLabel>
               <FormDescription>Enable two factor authentication for your account</FormDescription>
               <FormControl>
-                <Switch disabled={ status === 'executing' }/>
+                <Switch disabled={ status === 'executing' || session.user.isOAuth }/>
               </FormControl>
               <FormMessage />
             </FormItem>

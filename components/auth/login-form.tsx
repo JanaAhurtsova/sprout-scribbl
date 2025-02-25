@@ -25,8 +25,8 @@ export const LoginForm = () => {
     mode: "onChange",
   });
 
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const { execute, status } = useStateAction(emailSignIn, {
     onSuccess(data) {

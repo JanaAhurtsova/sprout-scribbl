@@ -29,8 +29,8 @@ export const NewPasswordForm = () => {
   const searchParams = useSearchParams()
   const token = searchParams.get("token")
 
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const { execute, status } = useStateAction(newPassword, {
     onSuccess(data) {

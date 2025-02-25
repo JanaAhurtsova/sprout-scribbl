@@ -11,8 +11,8 @@ import { FormSuccess } from "./form-success";
 export const EmailVerificationForm = () => {
   const token = useSearchParams().get('token');
   const router = useRouter();
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleVerification = useCallback(async () => {
     if (success || error) return;
