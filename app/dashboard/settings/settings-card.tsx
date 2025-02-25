@@ -24,6 +24,7 @@ import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
 import { useState } from "react";
 import { settings } from "@/server/actions/settings";
+import { UploadButton } from "@/app/api/uploadthing/upload";
 
 export default function SettingsCard({ session }: { session: Session } ) {
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +39,7 @@ export default function SettingsCard({ session }: { session: Session } ) {
       newPassword: undefined,
       name: session.user?.name || undefined,
       isTwoFactorEnabled: session.user?.isTwoFactorEnabled || undefined,
-      image: session.user?.image || undefined,
+      image: session.user?.image || '',
     },
     mode: "onChange",
   })
@@ -90,10 +91,27 @@ export default function SettingsCard({ session }: { session: Session } ) {
               <FormLabel>Avatar</FormLabel>
               <div className="flex items-center gap-4">
                 {!image ? (
-                  <div className="font-bold">
+                  <div className="font-bold w-[42px] text-center">
                     {session.user?.name?.charAt(0).toUpperCase()}
                   </div>
                 ) : <Image className="rounded-full" src={image} alt="user image" width={42} height={42} />}
+                <UploadButton 
+                  className="scale-75 ut-button:ring-primary ut-label:bg-red-50 ut-button:bg-primary/75 hover:ut-button:bg-primary/100 ut:button:transition-all ut-button:duration-500 ut-label:hidden ut-allowed-content:hidden"
+                  endpoint="avatarUploader"
+                  onUploadBegin={() => setAvatarUploading(true)}
+                  onUploadError={(error) => {
+                    form.setError('image', {type: 'validate', message: error.message});
+                    setAvatarUploading(false);
+                  }}
+                  onClientUploadComplete={(res) => {
+                    form.setValue('image', res[0].ufsUrl);
+                    setAvatarUploading(false);
+                  }}
+                  content={{button({ready}) {
+                    if (ready) return <span>Change Avatar</span>
+                    return <span>Uploading...</span>
+                  }}} 
+                />
               </div>
               <FormControl>
                 <Input placeholder="User Image" type="hidden" disabled={ status === 'executing' } {...field} />
