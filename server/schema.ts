@@ -5,6 +5,7 @@ import {
   primaryKey,
   integer,
   pgEnum,
+  boolean,
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"
 import { createId } from "@paralleldrive/cuid2"
@@ -21,7 +22,7 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   password: text("password"),
-  twoFactorEnabled: integer("twoFactorEnabled").default(0),
+  twoFactorEnabled: boolean("twoFactorEnabled").default(false),
   role: RoleEnum("role").default("user"),
 });
 
@@ -79,17 +80,17 @@ export const passwordResetTokens = pgTable('password_reset_tokens', {
     },
   ])
 
-  export const twoFactorTokens = pgTable(
-  "two_factor_tokens",
-  {
-    id: text("id")
-      .notNull()
-      .$defaultFn(() => createId()),
-    token: text("token").notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
-    email: text("email").notNull(),
-  },
-  (vt) => [{
-    compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
-  }]
+export const twoFactorTokens = pgTable(
+"two_factor_tokens",
+{
+  id: text("id")
+    .notNull()
+    .$defaultFn(() => createId()),
+  token: text("token").notNull(),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
+  email: text("email").notNull(),
+},
+(vt) => [{
+  compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
+}]
 )

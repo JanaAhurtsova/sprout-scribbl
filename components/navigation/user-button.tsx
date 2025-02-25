@@ -28,7 +28,7 @@ export function UserButton({ user }: Session) {
     } else {
       setChecked(false);
     }
-  }, [])
+  }, [theme])
 
   return (
     <DropdownMenu modal={false}>
