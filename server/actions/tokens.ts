@@ -1,5 +1,6 @@
 'use server'
 import { eq } from "drizzle-orm";
+import crypto from "crypto"
 import { db } from "..";
 import { emailTokens, passwordResetTokens, twoFactorTokens, users } from "../schema";
 
@@ -110,7 +111,7 @@ export const getTwoFactorTokenByEmail = async (email: string) => {
 
 export const generateTwoFactorToken = async (email: string) => {
   try {
-    const token = crypto.randomUUID();
+    const token = crypto.randomInt(100_000, 1_000_000).toString()
     const expires = new Date(new Date().getTime() + 3600 * 1000)
 
     const existingToken = await getTwoFactorTokenByEmail(email)

@@ -38,7 +38,7 @@ export default function SettingsCard({ session }: { session: Session } ) {
       password: undefined,
       newPassword: undefined,
       name: session.user?.name || undefined,
-      isTwoFactorEnabled: session.user?.isTwoFactorEnabled || undefined,
+      isTwoFactorEnabled: Boolean(session.user?.isTwoFactorEnabled) || undefined,
       image: session.user?.image || '',
     },
     mode: "onChange",
@@ -54,6 +54,7 @@ export default function SettingsCard({ session }: { session: Session } ) {
     }
   })
   const image = form.watch('image');
+
   const onSubmit = (data: z.infer<typeof settingsSchema>) => {
     execute(data);
   }
@@ -149,12 +150,12 @@ export default function SettingsCard({ session }: { session: Session } ) {
         <FormField
           control={form.control}
           name="isTwoFactorEnabled"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Two Factor Authentication</FormLabel>
               <FormDescription>Enable two factor authentication for your account</FormDescription>
               <FormControl>
-                <Switch disabled={ status === 'executing' || session.user.isOAuth }/>
+                <Switch checked={field.value} onCheckedChange={field.onChange} disabled={ status === 'executing' || session.user.isOAuth }/>
               </FormControl>
               <FormMessage />
             </FormItem>

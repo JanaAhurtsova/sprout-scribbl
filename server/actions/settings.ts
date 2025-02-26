@@ -36,12 +36,13 @@ export const settings = actionClient.schema(settingsSchema).stateAction(async ({
     parsedInput.password = hashedPassword;
     parsedInput.newPassword = undefined;
   }
+  console.log(parsedInput.isTwoFactorEnabled)
   await db.update(users).set({
       password: parsedInput.password,
       name: parsedInput.name,
       image: parsedInput.image,
       email: parsedInput.email,
-      twoFactorEnabled: parsedInput.isTwoFactorEnabled,
+      twoFactorEnabled: Number(parsedInput.isTwoFactorEnabled),
     }).where(eq(users.id, dbUser.id));
 
     revalidatePath('/dashboard/settings');

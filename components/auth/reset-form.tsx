@@ -16,7 +16,6 @@ import { useStateAction } from "next-safe-action/stateful-hooks"
 import * as z from "zod"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { FormSuccess } from "./form-success"
@@ -64,7 +63,7 @@ export default function ResetForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -81,9 +80,6 @@ export default function ResetForm() {
               />
               <FormSuccess message={success} />
               <FormError message={error} />
-              <Button size={"sm"} variant={"link"} asChild>
-                <Link href="/reset">Forgot your password</Link>
-              </Button>
             </div>
             <Button
               type="submit"

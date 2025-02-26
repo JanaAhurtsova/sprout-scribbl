@@ -5,7 +5,6 @@ import {
   primaryKey,
   integer,
   pgEnum,
-  boolean,
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"
 import { createId } from "@paralleldrive/cuid2"
@@ -22,7 +21,7 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   password: text("password"),
-  twoFactorEnabled: boolean("twoFactorEnabled").default(false),
+  twoFactorEnabled: integer("twoFactorEnabled").default(0),
   role: RoleEnum("role").default("user"),
 });
 
