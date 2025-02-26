@@ -8,6 +8,7 @@ import { eq } from 'drizzle-orm';
 import { users } from '../schema';
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';
+import { saltRounds } from './constants';
 
 export const settings = actionClient.schema(settingsSchema).stateAction(async ({ parsedInput }) => {
   const user = await auth();
@@ -32,11 +33,11 @@ export const settings = actionClient.schema(settingsSchema).stateAction(async ({
     const samePassword = await bcrypt.compare(parsedInput.newPassword, dbUser.password);
     if (samePassword) return { error: 'New password is the same as the old password' };
 
-    const hashedPassword = await bcrypt.hash(parsedInput.newPassword, 10);
+    const hashedPassword = await bcrypt.hash(parsedInput.newPassword, saltRounds);
     parsedInput.password = hashedPassword;
     parsedInput.newPassword = undefined;
   }
-  console.log(parsedInput.isTwoFactorEnabled);
+
   await db
     .update(users)
     .set({

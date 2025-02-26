@@ -13,22 +13,19 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthCard } from './auth-card';
 import { useStateAction } from 'next-safe-action/stateful-hooks';
-import * as z from 'zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { FormSuccess } from './form-success';
 import { FormError } from './form-error';
-import { resetSchema } from '@/types/reset-schema';
+import { resetSchema, zResetSchema } from '@/types/reset-schema';
 import { resetPassword } from '@/server/actions/reset-password';
 
 export default function ResetForm() {
-  const form = useForm<z.infer<typeof resetSchema>>({
+  const form = useForm<zResetSchema>({
     resolver: zodResolver(resetSchema),
-    defaultValues: {
-      email: '',
-    },
+    mode: 'onChange',
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +40,7 @@ export default function ResetForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof resetSchema>) => {
+  const onSubmit = (values: zResetSchema) => {
     execute(values);
   };
 

@@ -7,8 +7,7 @@ import { users } from '../schema';
 import { db } from '..';
 import { generateEmailVerificationToken } from './tokens';
 import { sendVerificationEmail } from './email';
-
-const saltRounds = 10;
+import { saltRounds } from './constants';
 
 export const emailRegister = actionClient
   .schema(registerSchema)

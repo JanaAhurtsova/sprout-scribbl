@@ -6,7 +6,7 @@ import * as z from 'zod';
 import { useStateAction } from 'next-safe-action/stateful-hooks';
 import Link from 'next/link';
 import { AuthCard } from './auth-card';
-import { loginSchema } from '@/types/login-schema';
+import { loginSchema, zLoginSchema } from '@/types/login-schema';
 import {
   Form,
   FormControl,
@@ -25,12 +25,8 @@ import { FormError } from './form-error';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
 
 export const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginSchema>>({
+  const form = useForm<zLoginSchema>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
     mode: 'onChange',
   });
 
@@ -46,7 +42,7 @@ export const LoginForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof loginSchema>) => {
+  const onSubmit = (data: zLoginSchema) => {
     execute(data);
   };
   return (

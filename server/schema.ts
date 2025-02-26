@@ -1,8 +1,9 @@
 import { timestamp, pgTable, text, primaryKey, integer, pgEnum } from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
 import { createId } from '@paralleldrive/cuid2';
+import { ROLES } from '@/types/roles';
 
-export const RoleEnum = pgEnum('role', ['user', 'admin']);
+export const RoleEnum = pgEnum('role', ['user', ROLES.ADMIN]);
 
 export const users = pgTable('user', {
   id: text('id')

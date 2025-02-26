@@ -1,6 +1,8 @@
 import DashboardNav from '@/components/navigation/dashboard-nav';
 import { auth } from '@/server/auth';
+import { ROLES } from '@/types/roles';
 import { BarChart, Package, PenSquare, Settings, Truck } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 export default async function DashboardLayout({
   children,
@@ -8,6 +10,8 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
+  if (!session) redirect('/');
 
   const userLinks = [
     {
@@ -23,7 +27,7 @@ export default async function DashboardLayout({
   ] as const;
 
   const adminLinks =
-    session?.user.role === 'admin'
+    session?.user.role === ROLES.ADMIN
       ? [
           {
             label: 'Analytics',

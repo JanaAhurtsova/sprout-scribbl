@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import * as z from 'zod';
 
 import { AuthCard } from './auth-card';
 import {
@@ -22,15 +21,12 @@ import { FormSuccess } from './form-success';
 import { FormError } from './form-error';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
-import { newPasswordSchema } from '@/types/new-password-schema';
+import { newPasswordSchema, zNewPasswordSchema } from '@/types/new-password-schema';
 import { newPassword } from '@/server/actions/new-password';
 
 export const NewPasswordForm = () => {
-  const form = useForm({
+  const form = useForm<zNewPasswordSchema>({
     resolver: zodResolver(newPasswordSchema),
-    defaultValues: {
-      password: '',
-    },
     mode: 'onChange',
   });
 
@@ -49,7 +45,7 @@ export const NewPasswordForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof newPasswordSchema>) => {
+  const onSubmit = (values: zNewPasswordSchema) => {
     execute({ password: values.password, token });
   };
   return (

@@ -7,3 +7,5 @@ export const registerSchema = z.object({
   }),
   name: z.string().min(2, { message: 'Please add a name with at least 2 characters' }),
 });
+
+export type zRegisterSchema = z.infer<typeof registerSchema>;

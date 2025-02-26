@@ -9,8 +9,7 @@ import { db } from '..';
 import bcrypt from 'bcryptjs';
 import { Pool } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
-
-const saltRounds = 10;
+import { saltRounds } from './constants';
 
 export const newPassword = actionClient
   .schema(newPasswordSchema)

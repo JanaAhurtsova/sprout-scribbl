@@ -27,7 +27,7 @@ export default function DashboardNav({
               >
                 {link.icon}
                 {link.label}
-                {pathname === link.path ? (
+                {pathname === link.path && (
                   <motion.div
                     className='absolute -bottom-1 left-0 z-0 h-[2px] w-full rounded-full bg-primary'
                     initial={{ scale: 0.5 }}
@@ -35,7 +35,7 @@ export default function DashboardNav({
                     layoutId='underline'
                     transition={{ type: 'spring', stiffness: 35 }}
                   />
-                ) : null}
+                )}
               </Link>
             </motion.li>
           ))}

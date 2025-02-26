@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { AuthCard } from './auth-card';
 import {
   Form,
@@ -18,18 +17,13 @@ import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { FormSuccess } from './form-success';
 import { FormError } from './form-error';
-import { registerSchema } from '@/types/register-schema';
+import { registerSchema, zRegisterSchema } from '@/types/register-schema';
 import { useStateAction } from 'next-safe-action/stateful-hooks';
 import { emailRegister } from '@/server/actions/email-register';
 
 export const RegisterForm = () => {
-  const form = useForm({
+  const form = useForm<zRegisterSchema>({
     resolver: zodResolver(registerSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-      name: '',
-    },
     mode: 'onChange',
   });
 
@@ -43,7 +37,7 @@ export const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof registerSchema>) => {
+  const onSubmit = (data: zRegisterSchema) => {
     execute(data);
   };
   return (

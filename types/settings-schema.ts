@@ -18,3 +18,5 @@ export const settingsSchema = z
     },
     { message: 'New password is required', path: ['newPassword'] },
   );
+
+export type zSettingsSchema = z.infer<typeof settingsSchema>;

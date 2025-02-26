@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { settingsSchema } from '@/types/settings-schema';
+import { settingsSchema, zSettingsSchema } from '@/types/settings-schema';
 import { useStateAction } from 'next-safe-action/stateful-hooks';
 import { Switch } from '@/components/ui/switch';
 import { FormError } from '@/components/auth/form-error';
@@ -31,7 +31,7 @@ export default function SettingsCard({ session }: { session: Session }) {
   const [success, setSuccess] = useState<string | null>(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
 
-  const form = useForm({
+  const form = useForm<zSettingsSchema>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
       email: session.user?.email || undefined,
@@ -55,7 +55,7 @@ export default function SettingsCard({ session }: { session: Session }) {
   });
   const image = form.watch('image');
 
-  const onSubmit = (data: z.infer<typeof settingsSchema>) => {
+  const onSubmit = (data: zSettingsSchema) => {
     execute(data);
   };
 
@@ -88,7 +88,7 @@ export default function SettingsCard({ session }: { session: Session }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Avatar</FormLabel>
-                  <div className='flex items-center gap-4'>
+                  <div className='flex items-center gap-2'>
                     {!image ? (
                       <div className='w-[42px] text-center font-bold'>
                         {session.user?.name?.charAt(0).toUpperCase()}
@@ -103,7 +103,7 @@ export default function SettingsCard({ session }: { session: Session }) {
                       />
                     )}
                     <UploadButton
-                      className='ut:button:transition-all scale-75 ut-button:bg-primary/75 ut-button:ring-primary ut-button:duration-500 hover:ut-button:bg-primary/100 ut-allowed-content:hidden ut-label:hidden ut-label:bg-red-50'
+                      className='ut:button:transition-all scale-75 ut-button:bg-primary ut-button:ring-primary ut-button:duration-500 hover:ut-button:bg-primary/75 ut-allowed-content:hidden ut-label:hidden ut-label:bg-red-50'
                       endpoint='avatarUploader'
                       onUploadBegin={() => setAvatarUploading(true)}
                       onUploadError={(error) => {
