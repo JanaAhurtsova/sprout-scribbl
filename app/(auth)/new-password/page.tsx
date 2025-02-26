@@ -1,5 +1,5 @@
-import { NewPasswordForm } from "@/components/auth/new-password-form";
+import { NewPasswordForm } from '@/components/auth/new-password-form';
 
-export default async function NewPassword () {
-  return <NewPasswordForm />
+export default async function NewPassword() {
+  return <NewPasswordForm />;
 }

@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { verifyEmailToken } from "@/server/actions/tokens";
-import { useSearchParams } from "next/navigation"
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { AuthCard } from "./auth-card";
-import { FormError } from "./form-error";
-import { FormSuccess } from "./form-success";
+import { verifyEmailToken } from '@/server/actions/tokens';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { AuthCard } from './auth-card';
+import { FormError } from './form-error';
+import { FormSuccess } from './form-success';
 
 export const EmailVerificationForm = () => {
   const token = useSearchParams().get('token');
@@ -18,7 +18,7 @@ export const EmailVerificationForm = () => {
     if (success || error) return;
     if (!token) {
       setError('Token no found');
-      return
+      return;
     }
     verifyEmailToken(token).then((data) => {
       if (data.error) {
@@ -28,7 +28,7 @@ export const EmailVerificationForm = () => {
         setSuccess(data.success);
         router.push('/login');
       }
-    })
+    });
   }, [error, router, success, token]);
 
   useEffect(() => {
@@ -36,12 +36,16 @@ export const EmailVerificationForm = () => {
   }, [handleVerification]);
 
   return (
-    <AuthCard cardTitle="Verify your account." backButtonHref="/login" backButtonLabel="Back to login">
-      <div className="flex items-center flex-col w-full justify-center">
-        <p>{!success && !error ? "Verifying Email..." : null}</p>
-        <FormSuccess message={success}/>
+    <AuthCard
+      cardTitle='Verify your account.'
+      backButtonHref='/login'
+      backButtonLabel='Back to login'
+    >
+      <div className='flex w-full flex-col items-center justify-center'>
+        <p>{!success && !error ? 'Verifying Email...' : null}</p>
+        <FormSuccess message={success} />
         <FormError message={error} />
       </div>
     </AuthCard>
-  )
-}
+  );
+};

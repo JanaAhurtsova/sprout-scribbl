@@ -1,61 +1,59 @@
-import {
-  timestamp,
-  pgTable,
-  text,
-  primaryKey,
-  integer,
-  pgEnum,
-} from "drizzle-orm/pg-core"
-import type { AdapterAccountType } from "next-auth/adapters"
-import { createId } from "@paralleldrive/cuid2"
+import { timestamp, pgTable, text, primaryKey, integer, pgEnum } from 'drizzle-orm/pg-core';
+import type { AdapterAccountType } from 'next-auth/adapters';
+import { createId } from '@paralleldrive/cuid2';
 
-export const RoleEnum = pgEnum("role", ["user", "admin"]);
+export const RoleEnum = pgEnum('role', ['user', 'admin']);
 
-export const users = pgTable("user", {
-  id: text("id")
+export const users = pgTable('user', {
+  id: text('id')
     .notNull()
     .primaryKey()
     .$defaultFn(() => createId()),
-  name: text("name"),
-  email: text("email").unique(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
-  password: text("password"),
-  twoFactorEnabled: integer("twoFactorEnabled").default(0),
-  role: RoleEnum("role").default("user"),
+  name: text('name'),
+  email: text('email').unique(),
+  emailVerified: timestamp('emailVerified', { mode: 'date' }),
+  image: text('image'),
+  password: text('password'),
+  twoFactorEnabled: integer('twoFactorEnabled').default(0),
+  role: RoleEnum('role').default('user'),
 });
 
 export const accounts = pgTable(
-  "account",
+  'account',
   {
-    userId: text("userId")
+    userId: text('userId')
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    type: text("type").$type<AdapterAccountType>().notNull(),
-    provider: text("provider").notNull(),
-    providerAccountId: text("providerAccountId").notNull(),
-    refresh_token: text("refresh_token"),
-    access_token: text("access_token"),
-    expires_at: integer("expires_at"),
-    token_type: text("token_type"),
-    scope: text("scope"),
-    id_token: text("id_token"),
-    session_state: text("session_state"),
+      .references(() => users.id, { onDelete: 'cascade' }),
+    type: text('type').$type<AdapterAccountType>().notNull(),
+    provider: text('provider').notNull(),
+    providerAccountId: text('providerAccountId').notNull(),
+    refresh_token: text('refresh_token'),
+    access_token: text('access_token'),
+    expires_at: integer('expires_at'),
+    token_type: text('token_type'),
+    scope: text('scope'),
+    id_token: text('id_token'),
+    session_state: text('session_state'),
   },
-  (account) => [{
-    compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId],
-    }),
-  }]
-)
+  (account) => [
+    {
+      compoundKey: primaryKey({
+        columns: [account.provider, account.providerAccountId],
+      }),
+    },
+  ],
+);
 
 export const emailTokens = pgTable(
-  "email_tokens",
+  'email_tokens',
   {
-    id: text("id").primaryKey().notNull().$defaultFn(() => createId()),
-    token: text("token").notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
-    email: text("email").notNull(),
+    id: text('id')
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => createId()),
+    token: text('token').notNull(),
+    expires: timestamp('expires', { mode: 'date' }).notNull(),
+    email: text('email').notNull(),
   },
   (et) => [
     {
@@ -63,33 +61,41 @@ export const emailTokens = pgTable(
         columns: [et.id, et.token],
       }),
     },
-  ]
-)
+  ],
+);
 
-export const passwordResetTokens = pgTable('password_reset_tokens', {
-  id: text("id").notNull().$defaultFn(() => createId()),
-  token: text("token").notNull(),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
-  email: text("email").notNull(),
-}, (et) => [
+export const passwordResetTokens = pgTable(
+  'password_reset_tokens',
+  {
+    id: text('id')
+      .notNull()
+      .$defaultFn(() => createId()),
+    token: text('token').notNull(),
+    expires: timestamp('expires', { mode: 'date' }).notNull(),
+    email: text('email').notNull(),
+  },
+  (et) => [
     {
       compositePk: primaryKey({
         columns: [et.id, et.token],
       }),
     },
-  ])
+  ],
+);
 
 export const twoFactorTokens = pgTable(
-"two_factor_tokens",
-{
-  id: text("id")
-    .notNull()
-    .$defaultFn(() => createId()),
-  token: text("token").notNull(),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
-  email: text("email").notNull(),
-},
-(vt) => [{
-  compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
-}]
-)
+  'two_factor_tokens',
+  {
+    id: text('id')
+      .notNull()
+      .$defaultFn(() => createId()),
+    token: text('token').notNull(),
+    expires: timestamp('expires', { mode: 'date' }).notNull(),
+    email: text('email').notNull(),
+  },
+  (vt) => [
+    {
+      compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
+    },
+  ],
+);

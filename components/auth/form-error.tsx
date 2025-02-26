@@ -1,10 +1,12 @@
-import { AlertCircle } from "lucide-react";
+import { AlertCircle } from 'lucide-react';
 
 export const FormError = ({ message }: { message?: string | null }) => {
   if (!message) return null;
 
-  return <div className="bg-destructive/25 flex text-xs items-center gap-2 my-4 font-medium text-secondary-foreground p-3 rounded-md">
-    <AlertCircle className="w-4 h-4" />
-    <p>{message}</p>
-  </div>
-}
+  return (
+    <div className='my-4 flex items-center gap-2 rounded-md bg-destructive/25 p-3 text-xs font-medium text-secondary-foreground'>
+      <AlertCircle className='h-4 w-4' />
+      <p>{message}</p>
+    </div>
+  );
+};

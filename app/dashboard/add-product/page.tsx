@@ -1,3 +1,1 @@
-export default async function AddProduct() {
-  
-}
+export default async function AddProduct() {}
