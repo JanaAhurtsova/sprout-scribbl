@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const ProductSchema = z.object({
+export const productSchema = z.object({
   id: z.number().optional(),
   title: z.string().min(5, {
     message: 'Title must be at least 5 characters long',
@@ -13,4 +13,4 @@ export const ProductSchema = z.object({
     .positive({ message: 'Price must be a positive number' }),
 });
 
-export type zProductSchema = z.infer<typeof ProductSchema>;
+export type zProductSchema = z.infer<typeof productSchema>;

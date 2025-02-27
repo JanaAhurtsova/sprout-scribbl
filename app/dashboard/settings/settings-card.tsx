@@ -3,7 +3,6 @@
 import { Session } from 'next-auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
@@ -60,7 +59,7 @@ export default function SettingsCard({ session }: { session: Session }) {
   };
 
   return (
-    <Card>
+    <Card className='mb-6'>
       <CardHeader>
         <CardTitle>Your Settings</CardTitle>
         <CardDescription>Update your account settings</CardDescription>

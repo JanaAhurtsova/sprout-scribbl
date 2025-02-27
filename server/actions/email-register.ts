@@ -3,11 +3,11 @@ import { registerSchema } from '@/types/register-schema';
 import { actionClient } from './action-client';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
-import { users } from '../schema';
 import { db } from '..';
 import { generateEmailVerificationToken } from './tokens';
 import { sendVerificationEmail } from './email';
 import { saltRounds } from './constants';
+import { users } from '../schema';
 
 export const emailRegister = actionClient
   .schema(registerSchema)

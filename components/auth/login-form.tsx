@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { useStateAction } from 'next-safe-action/stateful-hooks';
 import Link from 'next/link';
 import { AuthCard } from './auth-card';
@@ -27,6 +26,10 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
 export const LoginForm = () => {
   const form = useForm<zLoginSchema>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
     mode: 'onChange',
   });
 
