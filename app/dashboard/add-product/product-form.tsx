@@ -18,6 +18,8 @@ import { useStateAction } from 'next-safe-action/stateful-hooks';
 import { createProduct } from '@/server/actions/create-product';
 import { DollarSign } from 'lucide-react';
 import Tiptap from './tiptap';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function ProductForm() {
   const form = useForm<zProductSchema>({
@@ -25,10 +27,36 @@ export default function ProductForm() {
     mode: 'onChange',
     defaultValues: {
       price: 0,
+      description: '',
+      title: '',
     },
   });
 
-  const { execute, status } = useStateAction(createProduct, {});
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const editMode = searchParams.get('id');
+
+  const { execute, status } = useStateAction(createProduct, {
+    onSuccess(data) {
+      if (data.data?.success) {
+        router.push('/dashboard/products');
+        toast.success(data.data.success);
+      }
+      if (data?.data?.error) {
+        toast.error(data.data.error);
+      }
+    },
+    onError(err) {
+      console.log(err);
+    },
+    onExecute() {
+      if (editMode) {
+        toast.loading('Editing Product');
+      } else {
+        toast.loading('Creating Product');
+      }
+    },
+  });
 
   const onSubmit = (data: zProductSchema) => {
     execute(data);

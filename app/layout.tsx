@@ -3,6 +3,7 @@ import { Roboto } from 'next/font/google';
 import Nav from '@/components/navigation/nav';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/themes';
+import { Toaster } from '@/components/ui/sonner';
 
 const roboto = Roboto({
   weight: ['400', '500', '700', '900'],
@@ -25,6 +26,7 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='light' enableSystem>
           <div className='mx-auto max-w-8xl flex-grow px-6 md:px-12'>
             <Nav />
+            <Toaster />
             {children}
           </div>
         </ThemeProvider>
